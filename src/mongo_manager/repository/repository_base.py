@@ -1,11 +1,12 @@
-from mongo_manager.patrones.singleton import SingletonMeta
+from src.mongo_manager.mongo_manager import SingletonMeta
 from bson import ObjectId
+
 
 class RepositoryBase(metaclass=SingletonMeta):
 
     def __init__(self, collection, clase) -> None:
         __metaclass__ = SingletonMeta
-        from mongo_manager.mongo_manager import mongo_manager_gl
+        from src.mongo_manager.mongo_manager import mongo_manager_gl
         self.__collection = mongo_manager_gl.collection(collection)
         self.__clase = clase
 

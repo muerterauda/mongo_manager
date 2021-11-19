@@ -1,7 +1,7 @@
 # Especificos
 main_test.py
-mongo_manager/entity/book.py
-mongo_manager/repository/repository_book.py
+src/mongo_manager/entity/book.py
+src/mongo_manager/repository/repository_book.py
 
 # Created by .ignore support plugin (hsz.mobi)
 ### VirtualEnv template
