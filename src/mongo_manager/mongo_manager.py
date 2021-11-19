@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 
-from src.mongo_manager.patrones.singleton import SingletonMeta
+from ..mongo_manager.patrones.singleton import SingletonMeta
 
 mongo_manager_gl = None
 
