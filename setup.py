@@ -8,8 +8,8 @@ setup(
     description='Libreria para manejar objetos almacenados en MongoDB, usando la referencia de los CRUDRepository de SpringBoot',
     author='Juan Palma Borda',
     author_email='juanpalmaborda@hotmail.com',
-    url='https://github.com//',
-    download_url='https://github.com///archive/pypi-0_1_3.tar.gz',
+    url='https://github.com/muerterauda/mongo_manager',
+    download_url='https://github.com/muerterauda/mongo_manager/archive/v_0_1.tar.gz',
     keywords=['mongo', 'mongodb', 'object', 'reposiroty', 'entity'],
     install_requires=[
         'bson',
