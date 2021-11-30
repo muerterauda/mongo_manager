@@ -25,10 +25,7 @@ class ObjetoMongoAbstract(ABC):
 
     @staticmethod
     def serialize_all(objetos):
-        x = []
-        for objeto in objetos:
-            x.append(objeto.get_dict_no_id())
-        return json.dumps(x)
+        return json.dumps(ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos))
 
     @staticmethod
     @abstractmethod
@@ -36,8 +33,9 @@ class ObjetoMongoAbstract(ABC):
         pass
 
     @staticmethod
-    def generar_objects_from_list_dicts(dictionaries, cls):
-        c = []
-        for dictionary in dictionaries:
-            c.append(cls.generar_object_from_dict(dictionary))
-        return c
+    def generar_objects_from_list_dicts(dictionaries: list, cls):
+        return [cls.generar_object_from_dict(dictionary) for dictionary in dictionaries]
+
+    @staticmethod
+    def generar_list_dicts_from_list_objects(lista_objetos: list):
+        return [c.get_dict_no_id() for c in lista_objetos]

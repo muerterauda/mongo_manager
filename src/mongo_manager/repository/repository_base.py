@@ -1,3 +1,5 @@
+import pymongo
+
 from ..mongo_manager import SingletonMeta
 from bson import ObjectId
 
@@ -11,7 +13,7 @@ class RepositoryBase(metaclass=SingletonMeta):
         self.__clase = clase
 
     @property
-    def collection(self):
+    def collection(self) -> pymongo.collection.Collection:
         return self.__collection
 
     @property
@@ -19,7 +21,7 @@ class RepositoryBase(metaclass=SingletonMeta):
         return self.__clase
 
     def count_all(self):
-        return self.collection.count()
+        return self.collection.count_documents({})
 
     def get_all(self, skip=0, limit=1000):
         return self.clase.generar_objects_from_list_dicts(self.collection.find().skip(skip).limit(limit), self.clase)
@@ -27,8 +29,18 @@ class RepositoryBase(metaclass=SingletonMeta):
     def find_by_id(self, id_mongo):
         return self.clase.generar_object_from_dict(self.collection.find_one({'_id': ObjectId(id_mongo)}))
 
+    def delete_object(self, objeto):
+        if objeto.id_mongo is not None:
+            return self.delete_by_id(objeto.id_mongo)
+
+    def delete_by_id(self, id_mongo):
+        return self.collection.delete_one({'_id': ObjectId(id_mongo)})
+
     def insert_one(self, objeto):
         return self.collection.insert_one(objeto.get_dict_no_id())
+
+    def insert_many(self, lista_objetos: list):
+        return self.collection.insert_many(self.clase.generar_list_dicts_from_list_objects(lista_objetos))
 
     def insert_or_replace_id(self, objeto):
         if objeto.id_mongo is None:
