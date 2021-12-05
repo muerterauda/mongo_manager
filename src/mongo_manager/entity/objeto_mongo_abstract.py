@@ -6,8 +6,10 @@ from bson import ObjectId
 
 class ObjetoMongoAbstract(ABC):
 
-    def __init__(self, _id=None):
+    def __init__(self, _id=None, **kwargs):
         self._id = _id
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     @property
     def id(self) -> ObjectId:
