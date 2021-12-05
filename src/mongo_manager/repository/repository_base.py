@@ -28,10 +28,10 @@ class RepositoryBase(metaclass=SingletonMeta):
         return self.collection.count_documents({})
 
     def get_all(self, skip=0, limit=1000) -> list:
-        return self.clase.generar_objects_from_list_dicts(self.collection.find().skip(skip).limit(limit), self.clase)
+        return self.clase.generar_objects_from_list_dicts(self.collection.find().skip(skip).limit(limit))
 
     def find_by_id(self, id_mongo) -> ObjetoMongoAbstract:
-        return self.clase.generar_object_from_dict(self.collection.find_one({'_id': ObjectId(id_mongo)}), self.clase)
+        return self.clase.generar_object_from_dict(self.collection.find_one({'_id': ObjectId(id_mongo)}))
 
     def delete_object(self, objeto) -> DeleteResult:
         if objeto.id is not None:

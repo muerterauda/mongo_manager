@@ -53,15 +53,15 @@ class ObjetoMongoAbstract(ABC):
         return json.dumps(ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos, id_mongo=id_mongo,
                                                                                    id_as_string=True))
 
-    @staticmethod
-    def generar_object_from_dict(dictionary, cls):
+    @classmethod
+    def generar_object_from_dict(cls, dictionary):
         if dictionary is None:
             return None
         return cls(**dictionary)
 
-    @staticmethod
-    def generar_objects_from_list_dicts(dictionaries: list, cls):
-        return [cls.generar_object_from_dict(dictionary, cls) for dictionary in dictionaries]
+    @classmethod
+    def generar_objects_from_list_dicts(cls, dictionaries: list):
+        return [cls.generar_object_from_dict(dictionary) for dictionary in dictionaries]
 
     @staticmethod
     def generar_list_dicts_from_list_objects(lista_objetos: list, id_mongo=True, id_as_string=False):
