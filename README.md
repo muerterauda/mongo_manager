@@ -1,4 +1,4 @@
-# Mongo Manager
+# Mongo Manager (0.3.0)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
@@ -73,8 +73,8 @@ que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook<
         d = BookOverrided('test')
         a.insert_one(b)
         c.insert_one(d)
-        print(a.get_all()[-1])
-        print(c.get_all()[-1])
+        print(a.find_all()[-1])
+        print(c.find_all()[-1])
 
 
     if __name__ == '__main__':

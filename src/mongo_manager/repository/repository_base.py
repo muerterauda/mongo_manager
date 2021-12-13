@@ -27,7 +27,7 @@ class RepositoryBase(metaclass=SingletonMeta):
     def count_all(self) -> Any:
         return self.collection.count_documents({})
 
-    def get_all(self, skip=0, limit=1000) -> list:
+    def find_all(self, skip=0, limit=1000) -> list:
         return self.clase.generar_objects_from_list_dicts(self.collection.find().skip(skip).limit(limit))
 
     def find_by_id(self, id_mongo) -> ObjetoMongoAbstract:

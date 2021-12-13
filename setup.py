@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="mongo-manager-juan-palma-borda",
-    version="0.2.2",
+    version="0.3.0",
     author='Juan Palma Borda',
     author_email='juanpalmaborda@hotmail.com',
     description='Libreria para manejar objetos almacenados en MongoDB, '
