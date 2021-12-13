@@ -1,4 +1,4 @@
-# Mongo Manager
+# Mongo Manager (0.3.0)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
@@ -12,7 +12,10 @@ invocar ningun repositorio de objetos.
 ### ObjetoMongoAbstract
 
 Clase abstracta en la que se representa un objeto mongo predefinido,
-su constructor recibe un object id haciendo referencia al '_id' del objeto Mongo.
+su constructor recibe un object _id haciendo referencia al '_id' del
+objeto Mongo y **kwargs con los argumentos desechados por el
+constructor concreto de tu clase. Es recomendable llamar al contructor 
+padre para establecer los atributos.
 
 ### RepositoryBase
 
@@ -27,34 +30,51 @@ que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook<
  para poder manejar el objeto de manera más comoda.
 
     class Book(ObjetoMongoAbstract):
-            def __init__(self, name, id_mongo=None):
+            def __init__(self, name, id_mongo=None, **kwargs):
                 super().__init__(id_mongo)
                 self.name = name
-
-            def get_dict_no_id(self) -> dict:
-                return {
-                    "name": self.name
-                }
-        
-            @staticmethod
-            def generar_object_from_dict(dictionary):
-                if dictionary is None:
-                    return None
-                return Book(name=dictionary.get("name"),
-                            id_mongo=dictionary.get('_id'))
         
             def __str__(self) -> str:
                 return "{}".format(self.name)
-                
+
+    class BookOverrided(ObjetoMongoAbstract):
+            def __init__(self, name, id_mongo=None, **kwargs):
+                super().__init__(id_mongo)
+                self.name = name
+
+            def get_dict(self, id_mongo=True, id_as_string=False) -> dict:
+                d = super().get_dict(id_mongo, id_as_string)
+                d.pop('name')
+                d['nombre'] = self.name
+                return d
+        
+            @classmethod
+            def generar_object_from_dict(cls, dictionary):
+                if dictionary is None:
+                    return None
+                return cls(name=dictionary.get('nombre'))
+
+
+            def __str__(self) -> str:
+                return "{}".format(self.name)
+
     class RepositoryBook(RepositoryBase):
         def __init__(self) -> None:
             super().__init__('book', Book)
 
+    class RepositoryBookOverrided(RepositoryBase):
+        def __init__(self) -> None:
+            super().__init__('book', BookOverrided)
+
     def main():
         a = RepositoryBook()
         b = Book('test')
+        c = RepositoryBookOverrided()
+        d = BookOverrided('test')
         a.insert_one(b)
-        print(a.get_all()[-1])
+        c.insert_one(d)
+        print(a.find_all()[-1])
+        print(c.find_all()[-1])
 
 
     if __name__ == '__main__':
