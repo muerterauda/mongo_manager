@@ -17,7 +17,7 @@ class MongoManager(metaclass=SingletonMeta):
         if bd_online:
             self.__bd = MongoClient(url_online)[db]
         else:
-            if authenticated or username == '':
+            if authenticated:
                 if auth_source == '':
                     self.__bd = \
                         MongoClient('mongodb://{}:{}@localhost:{}'.format(username, password, port_local))[db]
