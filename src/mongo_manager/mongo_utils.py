@@ -72,3 +72,12 @@ def mongo_concat(valor: list) -> dict:
 
 def mongo_exists(existe: bool = True) -> dict:
     return {'$exists': existe}
+
+
+def mongo_eq(valor) -> dict:
+    return {'$eq': valor}
+
+
+def mongo_ne(valor) -> dict:
+    return {'$ne': valor}
+

@@ -1,5 +1,9 @@
 # Especificos
 main_test.py
+A.py
+B.py
+repository_A.py
+repository_B.py
 src/mongo_manager/entity/book.py
 src/mongo_manager/repository/repository_book.py
 

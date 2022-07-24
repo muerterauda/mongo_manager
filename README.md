@@ -1,4 +1,4 @@
-# Mongo Manager (0.3.2)
+# Mongo Manager (0.4.0)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
@@ -31,7 +31,7 @@ que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook<
 
     class Book(ObjetoMongoAbstract):
             def __init__(self, name, id_mongo=None, **kwargs):
-                super().__init__(id_mongo)
+                super().__init__(id_mongo, **kwargs)
                 self.name = name
         
             def __str__(self) -> str:
@@ -39,7 +39,7 @@ que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook<
 
     class BookOverrided(ObjetoMongoAbstract):
             def __init__(self, name, id_mongo=None, **kwargs):
-                super().__init__(id_mongo)
+                super().__init__(id_mongo, **kwargs)
                 self.name = name
 
             def get_dict(self, id_mongo=True, id_as_string=False) -> dict:
@@ -58,11 +58,11 @@ que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook<
             def __str__(self) -> str:
                 return "{}".format(self.name)
 
-    class RepositoryBook(RepositoryBase):
+    class RepositoryBook(RepositoryBase[Book]):
         def __init__(self) -> None:
             super().__init__('book', Book)
 
-    class RepositoryBookOverrided(RepositoryBase):
+    class RepositoryBookOverrided(RepositoryBase[BookOverrided]):
         def __init__(self) -> None:
             super().__init__('book', BookOverrided)
 
