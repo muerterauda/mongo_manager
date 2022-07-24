@@ -56,20 +56,20 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
     def find_by_id(self, id_mongo) -> T_O:
         return self.clase.generar_object_from_dict(self.collection.find_one({'_id': ObjectId(id_mongo)}))
 
-    def delete_object(self, objeto) -> DeleteResult:
+    def delete_object(self, objeto: T_O) -> DeleteResult:
         if objeto.id is not None:
             return self.delete_by_id(objeto.id)
 
     def delete_by_id(self, id_mongo) -> DeleteResult:
         return self.collection.delete_one({'_id': ObjectId(id_mongo)})
 
-    def insert_one(self, objeto) -> InsertOneResult:
+    def insert_one(self, objeto: T_O) -> InsertOneResult:
         return self.collection.insert_one(objeto.get_dict_no_id())
 
     def insert_many(self, lista_objetos: list[T_O]) -> InsertManyResult:
         return self.collection.insert_many(self.clase.generar_list_dicts_from_list_objects(lista_objetos))
 
-    def insert_or_replace_id(self, objeto):
+    def insert_or_replace_id(self, objeto: T_O):
         if objeto.id is None:
             return self.insert_one(objeto)
         else:
