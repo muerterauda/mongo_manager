@@ -2,7 +2,7 @@ from pymongo import MongoClient
 
 from .patrones.singleton import SingletonMeta
 
-mongo_manager_gl = None
+_mongo_manager_gl = None
 
 
 class MongoManager(metaclass=SingletonMeta):
@@ -27,8 +27,8 @@ class MongoManager(metaclass=SingletonMeta):
                                     authSource=auth_source)[db]
             else:
                 self.__bd = MongoClient('mongodb://localhost:{}'.format(port_local))[db]
-        global mongo_manager_gl
-        mongo_manager_gl = self
+        global _mongo_manager_gl
+        _mongo_manager_gl = self
 
     @property
     def bd(self):

@@ -1,7 +1,10 @@
+from __future__ import annotations
+
 import json
 from abc import ABC
 
 from bson import ObjectId
+from pymongo.cursor import Cursor
 
 
 class ObjetoMongoAbstract(ABC):
@@ -62,7 +65,7 @@ class ObjetoMongoAbstract(ABC):
         return cls(**dictionary)
 
     @classmethod
-    def generar_objects_from_list_dicts(cls, dictionaries: list):
+    def generar_objects_from_list_dicts(cls, dictionaries: list | Cursor):
         return [cls.generar_object_from_dict(dictionary) for dictionary in dictionaries]
 
     @staticmethod

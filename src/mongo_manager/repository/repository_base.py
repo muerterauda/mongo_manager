@@ -1,4 +1,4 @@
-from typing import TypeVar, Type, Generic
+from typing import TypeVar, Type, Generic, Optional
 
 import pymongo
 from pymongo.results import UpdateResult, InsertManyResult, InsertOneResult, DeleteResult
@@ -14,7 +14,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def __init__(self, collection, clase: Type[T_O]) -> None:
         __metaclass__ = SingletonMeta
-        from ..mongo_manager import mongo_manager_gl
+        from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
         self.__collection = mongo_manager_gl.collection(collection)
         self.__clase = clase
 
@@ -63,11 +63,12 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
     def delete_by_id(self, id_mongo) -> DeleteResult:
         return self.collection.delete_one({'_id': ObjectId(id_mongo)})
 
-    def insert_one(self, objeto: T_O) -> InsertOneResult:
-        return self.collection.insert_one(objeto.get_dict_no_id())
+    def insert_one(self, objeto: T_O, id_mongo=False) -> InsertOneResult:
+        return self.collection.insert_one(objeto.get_dict_no_id() if not id_mongo else objeto.get_dict())
 
-    def insert_many(self, lista_objetos: list[T_O]) -> InsertManyResult:
-        return self.collection.insert_many(self.clase.generar_list_dicts_from_list_objects(lista_objetos))
+    def insert_many(self, lista_objetos: list[T_O], id_mongo=False) -> InsertManyResult:
+        return self.collection.insert_many(self.clase.generar_list_dicts_from_list_objects(lista_objetos,
+                                                                                           id_mongo=id_mongo))
 
     def insert_or_replace_id(self, objeto: T_O):
         if objeto.id is None:
@@ -81,7 +82,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
     def update_by_id(self, id_mongo, objeto_dict: dict) -> UpdateResult:
         return self.collection.update_one({"_id": id_mongo}, {"$set": objeto_dict})
 
-    def update_many(self,  filter_dict: dict = None, objeto_dict: dict = None) -> UpdateResult:
+    def update_many(self,  filter_dict: dict = None, objeto_dict: dict = None) -> Optional[UpdateResult]:
         if objeto_dict is None:
             return None
         if filter_dict is None:

@@ -81,3 +81,10 @@ def mongo_eq(valor) -> dict:
 def mongo_ne(valor) -> dict:
     return {'$ne': valor}
 
+
+def mongo_regex(regex, options) -> dict:
+    return {'$regex': regex, '$options': options}
+
+
+def mongo_regex_compare_insensitive(valor: str) -> dict:
+    return mongo_regex('^'+valor+'$', 'i')
