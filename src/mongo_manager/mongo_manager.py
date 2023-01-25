@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pymongo import MongoClient
 
 from .patrones.singleton import SingletonMeta

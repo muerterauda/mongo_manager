@@ -38,6 +38,18 @@ def mongo_sum(valor: int) -> dict:
     return {'$sum': valor}
 
 
+def mongo_sum_field(field: str) -> dict:
+    return {'$sum': field}
+
+
+def mongo_round(field: str, decimal: int) -> dict:
+    return {'$round': [field, decimal]}
+
+
+def mongo_trunc(field: str, decimal: int) -> dict:
+    return {'$trunc': [field, decimal]}
+
+
 def mongo_in(valor: list) -> dict:
     return {'$in': valor}
 
@@ -87,4 +99,4 @@ def mongo_regex(regex, options) -> dict:
 
 
 def mongo_regex_compare_insensitive(valor: str) -> dict:
-    return mongo_regex('^'+valor+'$', 'i')
+    return mongo_regex('^' + valor + '$', 'i')
