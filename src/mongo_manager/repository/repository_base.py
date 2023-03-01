@@ -47,13 +47,16 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             filter_dict = {}
         return self.clase.generar_object_from_dict(self.collection.find_one(filter_dict))
 
-    def find_many(self, filter_dict: dict = None, skip=0, limit=1000) -> list[T_O]:
+    def find_many(self, filter_dict: dict = None, skip=0, limit=1000, sort=None) -> list[T_O]:
         if filter_dict is None:
             filter_dict = {}
-        return self.clase.generar_objects_from_list_dicts(self.collection.find(filter_dict).skip(skip).limit(limit))
+        lista_obj = self.collection.find(filter_dict).skip(skip).limit(limit)
+        if sort is not None:
+            lista_obj.sort(sort)
+        return self.clase.generar_objects_from_list_dicts(lista_obj)
 
-    def find_all(self, skip=0, limit=1000) -> list[T_O]:
-        return self.clase.generar_objects_from_list_dicts(self.collection.find().skip(skip).limit(limit))
+    def find_all(self, skip=0, limit=1000, sort=None) -> list[T_O]:
+        return self.find_many(skip=skip, limit=limit, sort=sort)
 
     def find_by_id(self, id_mongo) -> T_O:
         return self.clase.generar_object_from_dict(self.collection.find_one({'_id': ObjectId(id_mongo)}))
@@ -84,7 +87,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
     def update_by_id(self, id_mongo, objeto_dict: dict) -> UpdateResult:
         return self.collection.update_one({"_id": id_mongo}, {"$set": objeto_dict})
 
-    def update_many(self,  filter_dict: dict = None, objeto_dict: dict = None) -> Optional[UpdateResult]:
+    def update_many(self, filter_dict: dict = None, objeto_dict: dict = None) -> Optional[UpdateResult]:
         if objeto_dict is None:
             return None
         if filter_dict is None:
