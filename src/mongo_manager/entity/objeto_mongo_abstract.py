@@ -30,6 +30,8 @@ class ObjetoMongoAbstract(ABC):
             d.pop('_id')
         elif id_as_string and self._id is not None:
             d['_id'] = str(self._id)
+        for x, y in self.get_attr_nested_objects().items():
+            d[x] = y.get_dict(False, False)
         return d
 
     def get_dict_no_id(self) -> dict:
@@ -62,6 +64,8 @@ class ObjetoMongoAbstract(ABC):
     def generar_object_from_dict(cls, dictionary):
         if dictionary is None:
             return None
+        for x, y in cls.get_attr_nested_objects().items():
+            dictionary[x] = y.generar_object_from_dict(**y)
         return cls(**dictionary)
 
     @classmethod
@@ -71,3 +75,7 @@ class ObjetoMongoAbstract(ABC):
     @staticmethod
     def generar_list_dicts_from_list_objects(lista_objetos: list, id_mongo=True, id_as_string=False):
         return [c.get_dict(id_mongo=id_mongo, id_as_string=id_as_string) for c in lista_objetos]
+
+    @staticmethod
+    def get_attr_nested_objects() -> dict:
+        return {}
