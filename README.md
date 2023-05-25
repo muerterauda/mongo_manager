@@ -1,4 +1,4 @@
-# Mongo Manager (0.7.0)
+# Mongo Manager (0.7.2)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
