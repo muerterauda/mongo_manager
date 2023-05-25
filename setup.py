@@ -8,14 +8,14 @@ with open(path.join(here, 'README.md'), "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="mongo-manager-juan-palma-borda",
-    version="0.7.2",
+    version="0.7.3",
     author='Juan Palma Borda',
     author_email='juanpalmaborda@hotmail.com',
     description='Libreria para manejar objetos almacenados en MongoDB, '
                 'usando la referencia de los CRUDRepository de SpringBoot',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url = "https://github.com/muerterauda/mongo_manager",
+    url="https://github.com/muerterauda/mongo_manager",
     project_urls={
         "Bug Tracker": "https://github.com/muerterauda/mongo_manager/issues",
     },
