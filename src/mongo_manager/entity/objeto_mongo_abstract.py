@@ -66,11 +66,9 @@ class ObjetoMongoAbstract(ABC):
         return json.dumps(ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos, id_mongo=id_mongo,
                                                                                    id_as_string=True))
 
-    @classmethod
-    def generar_object_from_dict(cls, dictionary):
-        if dictionary is None:
-            return None
-        for x, y in cls.get_attr_nested_objects().items():
+    @staticmethod
+    def prepare_dict_for_generated_object(dictionary: dict, attr: dict) -> dict:
+        for x, y in attr.items():
             obj = dictionary.get(x, None)
             if obj is None:
                 continue
@@ -78,7 +76,14 @@ class ObjetoMongoAbstract(ABC):
                 dictionary[x] = y.generar_objects_from_list_dicts(obj)
             else:
                 dictionary[x] = y.generar_object_from_dict(obj)
-        return cls(**dictionary)
+        return dictionary
+
+    @classmethod
+    def generar_object_from_dict(cls, dictionary):
+        if dictionary is None:
+            return None
+        return cls(**cls.prepare_dict_for_generated_object(dictionary,
+                                                           cls.get_attr_nested_objects()))
 
     @classmethod
     def generar_objects_from_list_dicts(cls, dictionaries: list | Cursor):
