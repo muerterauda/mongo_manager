@@ -14,10 +14,12 @@ T_O = TypeVar('T_O', bound=ObjetoMongoAbstract)
 
 class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
-    def __init__(self, collection, clase: Type[T_O]) -> None:
+    def __init__(self, collection, clase: Type[T_O], connection_collection=None) -> None:
         __metaclass__ = SingletonMeta
-        from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
-        self.__collection = mongo_manager_gl.collection(collection)
+        if connection_collection is None:
+            from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
+            connection_collection = mongo_manager_gl.collection(collection)
+        self.__collection = connection_collection
         self.__clase = clase
 
     @property

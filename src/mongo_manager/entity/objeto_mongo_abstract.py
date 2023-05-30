@@ -31,7 +31,13 @@ class ObjetoMongoAbstract(ABC):
         elif id_as_string and self._id is not None:
             d['_id'] = str(self._id)
         for x, y in self.get_attr_nested_objects().items():
-            d[x] = y.get_dict(False, False)
+            obj = d.get(x, None)
+            if obj is None:
+                continue
+            if type(obj) is list:
+                d[x] = y.generar_list_dicts_from_list_objects(d[x], False, False)
+            else:
+                d[x] = d[x].get_dict(False, False)
         return d
 
     def get_dict_no_id(self) -> dict:
@@ -65,7 +71,13 @@ class ObjetoMongoAbstract(ABC):
         if dictionary is None:
             return None
         for x, y in cls.get_attr_nested_objects().items():
-            dictionary[x] = y.generar_object_from_dict(**y)
+            obj = dictionary.get(x, None)
+            if obj is None:
+                continue
+            if type(obj) is list:
+                dictionary[x] = y.generar_objects_from_list_dicts(obj)
+            else:
+                dictionary[x] = y.generar_object_from_dict(obj)
         return cls(**dictionary)
 
     @classmethod
@@ -78,4 +90,8 @@ class ObjetoMongoAbstract(ABC):
 
     @staticmethod
     def get_attr_nested_objects() -> dict:
+        """
+        Attributes which are objects of the class ObjetoMongoAbstract, all of them. Overrides parents methods.
+        @return: dict format {name_attr: class_attr}
+        """
         return {}

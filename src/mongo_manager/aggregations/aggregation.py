@@ -1,0 +1,2 @@
+class Aggregation:
+    raise NotImplemented

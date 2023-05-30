@@ -1,4 +1,4 @@
-# Mongo Manager (0.7.3)
+# Mongo Manager (0.8.0)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
@@ -17,13 +17,34 @@ objeto Mongo y **kwargs con los argumentos desechados por el
 constructor concreto de tu clase. Es recomendable llamar al contructor 
 padre para establecer los atributos.
 
+### Objetos internos
+
+En caso de tener objetos interno dentro del objeto principal es necesario
+reescribir las funciones internas get_dict y generar_object_from_dict de 
+forma que el objeto se transforme y destransforme en un diccionario.
+
+En caso de que el objeto o la lista de objetos internos hereden de la clase ObjetoMongoAbstract
+se puede modificar el metodo get_attr_nested_objects de la siguiente manera
+*{nombre_atributo: clase_atributo(aunque sea una lista)}* y automaticamente se instanciaran y desinstanciaran
+solos.
+
 ### RepositoryBase
 
 Repositorio base de mongo, recibe como parametros en el constructor,
 la coleccion a la que se hace referencia y el objeto al que va a convertir
 los resultados de las query que se realicen.
 
-## Ejemplo 
+En caso de querer usar una coleccion no perteneciente a la base de datos instanciada,
+se puede pasar el atributo *connection_collection* que debe ser una instancia de la conexion 
+MongoClient para la coleccion a tratar por el repositorio.
+
+### Aggregates
+
+Todavia no se han implementado ninguna clase que las trate a fondo, pero se pueden
+usar la mayoria de las *stages* y *operators* definidos en mongo_utils. Una vez definida la clase o 
+clases para tratar los Aggregates se compenetrara con estas funciones.
+
+## Ejemplo 1
 
 En este ejemplo veremos el uso de la libreria definiendo un objeto <i>Book</i> 
 que hereda de ObjetoMongoAbstract y para el que implementa un <i>RepositoryBook</i>
