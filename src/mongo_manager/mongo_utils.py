@@ -20,8 +20,8 @@ def aggregate_sort(diccionario: dict) -> dict:
     return {'$sort': diccionario}
 
 
-def aggregate_out(db_name, collection_name) -> dict:
-    return {'$out': {'db': db_name, 'coll': collection_name}}
+def aggregate_out(collection_name) -> dict:
+    return {'$out':  collection_name}
 
 
 def aggregate_limit(limit: int) -> dict:

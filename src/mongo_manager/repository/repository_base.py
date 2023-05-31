@@ -7,6 +7,7 @@ from pymongo.results import UpdateResult, InsertManyResult, InsertOneResult, Del
 
 from ..entity.objeto_mongo_abstract import ObjetoMongoAbstract
 from ..mongo_manager import SingletonMeta
+from ..mongo_utils import aggregate_out, aggregate_match
 from bson import ObjectId
 
 T_O = TypeVar('T_O', bound=ObjetoMongoAbstract)
@@ -43,6 +44,9 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def count_all(self) -> int:
         return self.collection.count_documents({})
+
+    def estimated_count(self) -> int:
+        return self.collection.estimated_document_count()
 
     def find_one(self, filter_dict: dict = None) -> T_O:
         if filter_dict is None:
@@ -95,3 +99,10 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         if filter_dict is None:
             filter_dict = {}
         self.collection.update_many(filter_dict, {"$set": objeto_dict})
+
+    def copy_collection_db(self, name_new_collection: str, condicion_copia: dict = None):
+        out = [aggregate_out(name_new_collection)]
+        if condicion_copia is not None:
+            match = aggregate_match(condicion_copia)
+            out = [match] + out
+        return self.collection.aggregate(out)
