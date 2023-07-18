@@ -42,7 +42,8 @@ class ObjetoMongoAbstract(ABC):
 
     def get_dict_no_id(self) -> dict:
         """
-        Fachade for get_dict(id_mongo=False). Return all variables from this object, similar to vars(object) with exception for _id
+        Facade for get_dict(id_mongo=False). Return all variables from this object, similar to vars(object)
+         with exception for _id
         @return: dict with object variables, similar to vars(object)
         """
         return self.get_dict(id_mongo=False)
@@ -85,6 +86,12 @@ class ObjetoMongoAbstract(ABC):
         return cls(**cls.prepare_dict_for_generated_object(dictionary,
                                                            cls.get_attr_nested_objects()))
 
+    def __repr__(self):
+        return str(self.get_dict(True, True))
+
+    def __str__(self):
+        return f'Class: {self.__class__.__name__} -> ObjectID {self._id}'
+
     @classmethod
     def generar_objects_from_list_dicts(cls, dictionaries: list | Cursor):
         return [cls.generar_object_from_dict(dictionary) for dictionary in dictionaries]
@@ -96,7 +103,7 @@ class ObjetoMongoAbstract(ABC):
     @staticmethod
     def get_attr_nested_objects() -> dict:
         """
-        Attributes which are objects of the class ObjetoMongoAbstract, all of them. Overrides parents methods.
+        Attributes which are objects of the class ObjetoMongoAbstract, all of them. Override parents methods.
         @return: dict format {name_attr: class_attr}
         """
         return {}

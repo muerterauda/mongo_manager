@@ -1,2 +1,1 @@
-bson
-pymongo
+pymongo>=3.12.1

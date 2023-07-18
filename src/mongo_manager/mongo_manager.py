@@ -1,7 +1,7 @@
 from __future__ import annotations
 from pymongo import MongoClient
 
-from .patrones.singleton import SingletonMeta
+from .patrones import SingletonMeta
 
 _mongo_manager_gl = None
 

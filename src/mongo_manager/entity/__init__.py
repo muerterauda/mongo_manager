@@ -1,0 +1,1 @@
+from .objeto_mongo_abstract import ObjetoMongoAbstract
