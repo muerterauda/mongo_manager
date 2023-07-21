@@ -1,55 +1,27 @@
-from abc import ABC, abstractmethod
-from collections import UserDict
+from abc import ABC
 
-from mongo_manager import MongoManagerAggregationException
-
-
-class AggregationStage(UserDict, ABC):
-    ID = '_id'
-
-    @classmethod
-    @abstractmethod
-    def key_word(cls) -> str:
-        pass
+from .aggregation_functions import AggregationFunction, AggregationFunctionDict,\
+    AggregationFunctionValue
 
 
-class _AggregationStageDict(AggregationStage, ABC):
-    def __init__(self, mapping: dict = None):
-        super().__init__()
-        if mapping is None:
-            mapping = {}
-        self.data = {self.key_word(): mapping}
-
-    def __setitem__(self, key, value):
-        self[self.key_word()][key] = value
+class AggregationStage(AggregationFunction, ABC):
+    pass
 
 
-class _AggregationStageValue(AggregationStage, ABC):
-
-    def __init__(self, mapping):
-        super().__init__()
-        if mapping is None:
-            mapping = {}
-        self.data = {self.key_word(): mapping}
-
-    def __setitem__(self, key, value):
-        raise MongoManagerAggregationException('No se ha definido ninguna funcion'
-                                               ' para añadir valores a este paso de la query.')
-
-
-class AggStMatch(_AggregationStageDict):
+class AggStMatch(AggregationFunctionDict, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
         return '$match'
 
 
-class AggStGroup(_AggregationStageDict):
+class AggStGroup(AggregationFunctionDict, AggregationStage):
 
     def __init__(self, id_mapping: dict = None, mapping: dict = None):
         super().__init__()
-        if id_mapping is None or id_mapping.get(self.ID) is None:
-            id_mapping = {self.ID: {}}
+        if id_mapping is None:
+            id_mapping = {}
+        id_mapping = {self.ID: id_mapping}
         if mapping is None:
             mapping = {}
         self.data = {self.key_word(): {**id_mapping, **mapping}}
@@ -62,13 +34,14 @@ class AggStGroup(_AggregationStageDict):
         return '$group'
 
 
-class AggStProject(_AggregationStageDict):
+class AggStProject(AggregationFunctionDict, AggregationStage):
 
-    def __init__(self, id_present: bool = False, mapping: dict = None):
+    def __init__(self, mapping: dict = None, id_present: bool = None):
         super().__init__()
         if mapping is None:
             mapping = {}
-        mapping[self.ID] = 1 if id_present else 0
+        if id_present is not None:
+            mapping[self.ID] = 1 if id_present else 0
         self.data = {self.key_word(): mapping}
 
     def presence_attr(self, att: str, presence: bool):
@@ -79,14 +52,14 @@ class AggStProject(_AggregationStageDict):
         return '$project'
 
 
-class AggStFacet(_AggregationStageDict):
+class AggStFacet(AggregationFunctionDict, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
         return '$facet'
 
 
-class AggStUnwind(_AggregationStageValue):
+class AggStUnwind(AggregationFunctionValue, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
@@ -96,7 +69,7 @@ class AggStUnwind(_AggregationStageValue):
         super().__init__(unwind_value)
 
 
-class AggStSort(_AggregationStageValue):
+class AggStSort(AggregationFunctionValue, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
@@ -106,7 +79,7 @@ class AggStSort(_AggregationStageValue):
         super().__init__(unwind_value)
 
 
-class AggStOut(_AggregationStageValue):
+class AggStOut(AggregationFunctionValue, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
@@ -116,7 +89,7 @@ class AggStOut(_AggregationStageValue):
         super().__init__(collection_out)
 
 
-class AggStLimit(_AggregationStageValue):
+class AggStLimit(AggregationFunctionValue, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
@@ -126,7 +99,7 @@ class AggStLimit(_AggregationStageValue):
         super().__init__(number_limit)
 
 
-class AggStSkip(_AggregationStageValue):
+class AggStSkip(AggregationFunctionValue, AggregationStage):
 
     @classmethod
     def key_word(cls) -> str:
@@ -136,7 +109,7 @@ class AggStSkip(_AggregationStageValue):
         super().__init__(number_skip)
 
 
-class AggStCount(_AggregationStageValue):
+class AggStCount(AggregationFunctionValue, AggregationStage):
 
     def __init__(self, var_count: str):
         super().__init__(var_count)
