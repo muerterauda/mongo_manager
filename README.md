@@ -1,4 +1,4 @@
-# Mongo Manager (0.9.0-Test)
+# Mongo Manager (0.9.0+test)
 
 Libreria para el manejo de Objetos almacenados en base de datos MongoDB
 
