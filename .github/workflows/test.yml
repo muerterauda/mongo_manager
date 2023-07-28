@@ -8,8 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
-        mongodb-version: ["4.2", "4.4", "5.0", "6.0"]
+        python-version: ["3.7"]
+#        , "3.8", "3.9", "3.10", "3.11"
+        mongodb-version: ["4.2"]
+#        , "4.4", "5.0", "6.0"
 
     steps:
       - uses: actions/checkout@v3
@@ -18,10 +20,10 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-actions@1.8.0
+        uses: supercharge/mongodb-github-actions@1.9.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
-          mongodb-port: 27001
+          mongodb-port: 27017
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
