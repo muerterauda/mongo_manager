@@ -19,7 +19,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def __init__(self, collection: str, clase: Type[T_O],
                  connection_collection=None) -> None:
-        __metaclass__ = SingletonMeta
+        __metaclass__ = SingletonMeta # noqa: F841
         if connection_collection is None:
             from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
             if mongo_manager_gl is None:
