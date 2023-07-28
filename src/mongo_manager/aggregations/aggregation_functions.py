@@ -46,7 +46,8 @@ class AggregationFunctionList(AggregationFunction, ABC):
 
     def __setitem__(self, key, value):
         raise MongoManagerAggregationException('No se ha definido ninguna funcion'
-                                               ' para añadir valores a este paso de la query.')
+                                               ' para añadir valores a este paso'
+                                               ' de la query.')
 
 
 class AggregationFunctionValue(AggregationFunction, ABC):
@@ -57,4 +58,5 @@ class AggregationFunctionValue(AggregationFunction, ABC):
 
     def __setitem__(self, key, value):
         raise MongoManagerAggregationException('No se ha definido ninguna funcion'
-                                               ' para añadir valores a este paso de la query.')
+                                               ' para añadir valores a'
+                                               ' este paso de la query.')

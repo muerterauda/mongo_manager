@@ -20,7 +20,8 @@ class ObjetoMongoAbstract(ABC):
 
     def get_dict(self, id_mongo=True, id_as_string=False) -> dict:
         """
-        Return all variables from this object, similar to vars(object) with exception for _id
+        Return all variables from this object, similar to vars(object)
+         with exception for _id
         @param id_mongo: True -> Return dict with _id
         @param id_as_string: True -> Return _id as str if id_mongo is True
         @return: dict with object variables, similar to vars(object)
@@ -42,7 +43,8 @@ class ObjetoMongoAbstract(ABC):
 
     def get_dict_no_id(self) -> dict:
         """
-        Facade for get_dict(id_mongo=False). Return all variables from this object, similar to vars(object)
+        Facade for get_dict(id_mongo=False). Return all variables from this object,
+         similar to vars(object)
          with exception for _id
         @return: dict with object variables, similar to vars(object)
         """
@@ -64,8 +66,10 @@ class ObjetoMongoAbstract(ABC):
         @param id_mongo: True -> Append _id to json
         @return: str in Json format
         """
-        return json.dumps(ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos, id_mongo=id_mongo,
-                                                                                   id_as_string=True))
+        return json.dumps(
+            ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos,
+                                                                     id_mongo=id_mongo,
+                                                                     id_as_string=True))
 
     @staticmethod
     def prepare_dict_for_generated_object(dictionary: dict, attr: dict) -> dict:
@@ -83,8 +87,8 @@ class ObjetoMongoAbstract(ABC):
     def generar_object_from_dict(cls, dictionary):
         if dictionary is None:
             return None
-        return cls(**cls.prepare_dict_for_generated_object(dictionary,
-                                                           cls.get_attr_nested_objects()))
+        return cls(**cls.prepare_dict_for_generated_object(
+            dictionary, cls.get_attr_nested_objects()))
 
     def __repr__(self):
         return str(self.get_dict(True, True))
@@ -97,13 +101,16 @@ class ObjetoMongoAbstract(ABC):
         return [cls.generar_object_from_dict(dictionary) for dictionary in dictionaries]
 
     @staticmethod
-    def generar_list_dicts_from_list_objects(lista_objetos: list, id_mongo=True, id_as_string=False):
-        return [c.get_dict(id_mongo=id_mongo, id_as_string=id_as_string) for c in lista_objetos]
+    def generar_list_dicts_from_list_objects(lista_objetos: list,
+                                             id_mongo=True, id_as_string=False):
+        return [c.get_dict(id_mongo=id_mongo, id_as_string=id_as_string)
+                for c in lista_objetos]
 
     @staticmethod
     def get_attr_nested_objects() -> dict:
         """
-        Attributes which are objects of the class ObjetoMongoAbstract, all of them. Override parents methods.
+        Attributes which are objects of the class ObjetoMongoAbstract,
+         all of them. Override parents methods.
         @return: dict format {name_attr: class_attr}
         """
         return {}
