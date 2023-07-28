@@ -1,1 +1,5 @@
-assert 1 == 1
+import pytest
+
+
+def test_pytest():
+    assert 1 == 1
