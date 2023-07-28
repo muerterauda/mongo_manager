@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Start MongoDB
-        uses: supercharge/mongodb-github-actions@1.9.0
+        uses: supercharge/mongodb-github-action@1.9.0
         with:
           mongodb-version: ${{ matrix.mongodb-version }}
           mongodb-port: 27017
