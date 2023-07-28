@@ -9,3 +9,6 @@ MONGO_MANAGER_DESCENDING = -1
 """Descending sort order."""
 
 ObjectMongoAbstract = ObjetoMongoAbstract
+
+__all__ = ['MongoManagerException', 'MongoManagerAggregationException', 'MongoManager', 'ObjetoMongoAbstract',
+           'ObjetoMongoAbstract', 'RepositoryBase', 'MONGO_MANAGER_ASCENDING', 'MONGO_MANAGER_DESCENDING']
