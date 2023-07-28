@@ -26,7 +26,7 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         'pymongo>=3.12.1'
     ],
