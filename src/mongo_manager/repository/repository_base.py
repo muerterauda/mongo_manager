@@ -128,3 +128,9 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             match = aggregate_match(condicion_copia)
             out = [match] + out
         return self.collection.aggregate(out)
+
+    def drop_collection(self, drop=False):
+        if not drop:
+            raise MongoManagerException('Medida de seguridad, fallo al intentar eliminar la coleccion\n'
+                                        'Security fail, try to drop entire collection avoided.')
+        self.collection.delete_many({})

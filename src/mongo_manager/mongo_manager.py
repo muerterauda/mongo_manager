@@ -46,3 +46,6 @@ class MongoManager(metaclass=SingletonMeta):
     def collection(self, collection):
         return self.bd[collection]
 
+    @classmethod
+    def _destroy(cls):
+        del cls._instances[cls]
