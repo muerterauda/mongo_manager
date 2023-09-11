@@ -24,6 +24,7 @@ jobs:
           mongodb-port: 27017
           mongodb-username: testMongoManager
           mongodb-password: testMongoManager
+          mongodb-auth-source: testMongoManager
           mongodb-db: testMongoManager
 
       - name: Install dependencies

@@ -9,3 +9,6 @@ build-backend = "setuptools.build_meta"
 pythonpath = [
   ""
 ]
+[tool.ruff]
+# Allow imports relative to the "src" and "test" directories.
+src = ["src", "test"]

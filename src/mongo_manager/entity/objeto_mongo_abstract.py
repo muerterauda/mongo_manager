@@ -35,7 +35,7 @@ class ObjetoMongoAbstract(ABC):
             obj = d.get(x, None)
             if obj is None:
                 continue
-            if type(obj) is list:
+            if isinstance(obj, list):
                 d[x] = y.generar_list_dicts_from_list_objects(d[x], False, False)
             else:
                 d[x] = d[x].get_dict(False, False)
@@ -77,7 +77,7 @@ class ObjetoMongoAbstract(ABC):
             obj = dictionary.get(x, None)
             if obj is None:
                 continue
-            if type(obj) is list:
+            if isinstance(obj, list):
                 dictionary[x] = y.generar_objects_from_list_dicts(obj)
             else:
                 dictionary[x] = y.generar_object_from_dict(obj)

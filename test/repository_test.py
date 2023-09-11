@@ -1,5 +1,3 @@
-import unittest
-
 from test.abstract_mongo_manager_test import AbstractMongoManagerTest
 from src.mongo_manager import RepositoryBase
 from test.classes_test import Book

@@ -131,6 +131,8 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def drop_collection(self, drop=False):
         if not drop:
-            raise MongoManagerException('Medida de seguridad, fallo al intentar eliminar la coleccion\n'
-                                        'Security fail, try to drop entire collection avoided.')
+            raise MongoManagerException('Medida de seguridad, fallo al '
+                                        'intentar eliminar la coleccion\n'
+                                        'Security fail, try to drop '
+                                        'entire collection avoided.')
         self.collection.delete_many({})
