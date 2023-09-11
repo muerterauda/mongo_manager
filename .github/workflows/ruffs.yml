@@ -1,5 +1,5 @@
 name: Ruff MongoManager
-
+run-name: Ruff Test on push commit to ${{ inputs.deploy_target }} by @${{ github.actor }}
 on: [push]
 
 jobs:
