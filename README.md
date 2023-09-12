@@ -1,6 +1,8 @@
 # Mongo Manager (0.9.1)
 
-Libreria para el manejo de Objetos almacenados en base de datos MongoDB
+Libreria para el manejo de Objetos almacenados en base de datos MongoDB.
+
+Testeado el funcionamiento basico en Python 3.7, 3.8, 3.9, 3.10 y 3.11 y para las versiones de Mongo 4.2, 4.4, 5.0 y 6.0.
 
 ## Clases
 
