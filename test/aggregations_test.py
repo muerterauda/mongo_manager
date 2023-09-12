@@ -1,7 +1,7 @@
 from test.abstract_mongo_manager_test import AbstractMongoManagerTest
 from src.mongo_manager import RepositoryBase
 from src.mongo_manager.aggregations import (agg_de, agg_st,
-                                            agg_op_re, AggregationExecutor)
+                                            AggregationExecutor)
 from test.classes_test import Book
 
 
