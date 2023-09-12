@@ -20,5 +20,35 @@ class TestRepository(AbstractMongoManagerTest):
     def test_insert(self):
         a = Book('test1', '', '', '')
         self.repo.insert_one(a)
+        c = self.repo.count_all()
+        assert c == 1
         b = self.repo.find_one()
         assert a.nombre == b.nombre
+
+    def test_insert_multiple(self):
+        a = Book('test1', '', '', '')
+        b = Book('test2', '', '', '')
+        self.repo.insert_many([a, b])
+        c = self.repo.count_all()
+        assert c == 2
+
+    def test_insert_vacio(self):
+        self.repo.insert_many([])
+        c = self.repo.count_all()
+        assert c == 0
+
+    def insertar_libros(self, n):
+        books = [Book(f'test{b}', '', '', '') for b in range(n)]
+        self.repo.insert_many(books)
+
+    def test_replace(self):
+        self.insertar_libros(1)
+        a = self.repo.count_all()
+        assert a == 1
+        b = self.repo.find_one()
+        b.nombre = 'test_replace'
+        self.repo.replace_by_id(b.id, b)
+        c = self.repo.count_all()
+        assert c == 1
+        d = self.repo.find_one()
+        assert d.nombre == 'test_replace'

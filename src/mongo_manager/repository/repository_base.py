@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Iterable
 from typing import TypeVar, Type, Generic, Optional
 
 import pymongo
@@ -96,7 +97,9 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         return self.collection.insert_one(objeto.get_dict_no_id()
                                           if not id_mongo else objeto.get_dict())
 
-    def insert_many(self, lista_objetos: list[T_O], id_mongo=False) -> InsertManyResult:
+    def insert_many(self, lista_objetos: list[T_O], id_mongo=False) -> InsertManyResult | None:
+        if lista_objetos is None or not isinstance(lista_objetos, Iterable) or len(lista_objetos) == 0:
+            return None
         return self.collection.insert_many(
             self.clase.generar_list_dicts_from_list_objects(
                 lista_objetos,id_mongo=id_mongo))
