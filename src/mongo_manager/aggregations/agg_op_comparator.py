@@ -5,7 +5,8 @@ from .aggregation_functions import \
 from .agreggation_operations import AggregationOperation
 
 
-class _AggregationOperationProjectComparison(AggregationOperation, AggregationFunctionValue, ABC):
+class _AggregationOperationProjectComparison(AggregationOperation,
+                                             AggregationFunctionValue, ABC):
     def __init__(self, first_value, second_value):
         super().__init__([first_value, second_value])
 

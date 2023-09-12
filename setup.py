@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="mongo-manager-juan-palma-borda",
-    version="0.9.0",
+    version="0.9.1",
     author='Juan Palma Borda',
     author_email='juanpalmaborda@hotmail.com',
     description='Libreria para manejar objetos almacenados en MongoDB, '
@@ -26,7 +26,7 @@ setuptools.setup(
     ],
     package_dir={"": "src"},
     packages=setuptools.find_packages(where="src"),
-    python_requires=">=3.6",
+    python_requires=">=3.7",
     install_requires=[
         'pymongo>=3.12.1'
     ],

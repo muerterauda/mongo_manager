@@ -10,8 +10,10 @@ from . import LOG_NAME_AGG, AggregationExecutor
 
 def aggregation_decorator(function):
     @functools.wraps(function)
-    def wrapper(self, *args, connection: pymongo.collection = None, **kwargs) -> List[dict]:
-        exe = self._generate_aggregation_executor() if connection is None else AggregationExecutor(connection)
+    def wrapper(self, *args,
+                connection: pymongo.collection = None, **kwargs) -> List[dict]:
+        exe = self._generate_aggregation_executor()\
+            if connection is None else AggregationExecutor(connection)
         agg = function(self, exe, *args, **kwargs)
         r = agg.execute()
         return r if r is None else list(r)
@@ -21,8 +23,10 @@ def aggregation_decorator(function):
 
 def aggregation_decorator_cursor(function):
     @functools.wraps(function)
-    def wrapper(self, *args, connection: pymongo.collection = None, **kwargs) -> Union[Cursor, None]:
-        exe = self._generate_aggregation_executor() if connection is None else AggregationExecutor(connection)
+    def wrapper(self, *args,
+                connection: pymongo.collection = None, **kwargs) -> Union[Cursor, None]:
+        exe = self._generate_aggregation_executor()\
+            if connection is None else AggregationExecutor(connection)
         agg = function(self, exe, *args, **kwargs)
         return agg.execute()
 
@@ -31,10 +35,12 @@ def aggregation_decorator_cursor(function):
 
 def aggregation_decorator_debug(function):
     @functools.wraps(function)
-    def wrapper(self, *args, connection: pymongo.collection = None, **kwargs) -> List[dict]:
+    def wrapper(self, *args,
+                connection: pymongo.collection = None, **kwargs) -> List[dict]:
         logging.basicConfig(level=logging.DEBUG)
         log = logging.getLogger(LOG_NAME_AGG)
-        exe = self._generate_aggregation_executor() if connection is None else AggregationExecutor(connection)
+        exe = self._generate_aggregation_executor()\
+            if connection is None else AggregationExecutor(connection)
         agg = function(self, exe, *args, **kwargs)
         log.debug('\n' + repr(agg))
         r = agg.execute()

@@ -12,7 +12,8 @@ def _pretty_query(query, total_tab='\t') -> str:
     _st = '\n' + total_tab
     if issubclass(type(query), _collections_abc.MutableMapping):
         st = _st.join([
-            "'{x}': {y}".format(x=x, y=_pretty_query(query=y, total_tab=total_tab + '\t'))
+            "'{x}': {y}".format(x=x,
+                                y=_pretty_query(query=y, total_tab=total_tab + '\t'))
             for x, y in query.items()])
         st = '{\n' + total_tab + st + '\n' + total_tab[:-1] + '}'
     elif issubclass(type(query), list):
