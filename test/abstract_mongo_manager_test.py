@@ -10,8 +10,7 @@ class AbstractMongoManagerTest(unittest.TestCase, ABC):
     def setUpClass(cls) -> None:
         MongoManager(username='testMongoManager',
                      password='testMongoManager',
-                     db='testMongoManager',
-                     auth_source='testMongoManager')
+                     db='testMongoManager')
 
     @classmethod
     def tearDownClass(cls) -> None:

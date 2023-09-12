@@ -1,5 +1,5 @@
 name: Test MongoManager
-
+run-name: Python Tests on push commit to ${{ inputs.deploy_target }} by @${{ github.actor }}
 on: [push]
 
 jobs:
@@ -26,8 +26,8 @@ jobs:
           mongodb-port: 27017
           mongodb-username: testMongoManager
           mongodb-password: testMongoManager
-          mongodb-auth-source: testMongoManager
           mongodb-db: testMongoManager
+          args: testMongoManager
 
       - name: Install dependencies
         run: |
