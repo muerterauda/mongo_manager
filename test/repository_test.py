@@ -52,3 +52,17 @@ class TestRepository(AbstractMongoManagerTest):
         assert c == 1
         d = self.repo.find_one()
         assert d.nombre == 'test_replace'
+
+    def test_insert_or_replace(self):
+        a = Book('test1', '', '', '')
+        self.repo.insert_or_replace_id(a)
+        b = self.repo.count_all()
+        assert b == 1
+        c = self.repo.find_one()
+        assert c.nombre == a.nombre
+        c.nombre = 'test_insert_or_replace'
+        self.repo.insert_or_replace_id(c)
+        d = self.repo.count_all()
+        assert d == 1
+        e = self.repo.find_one()
+        assert e.nombre == 'test_insert_or_replace'

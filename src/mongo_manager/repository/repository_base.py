@@ -98,7 +98,8 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
                                           if not id_mongo else objeto.get_dict())
 
     def insert_many(self, lista_objetos: list[T_O], id_mongo=False) -> InsertManyResult | None:
-        if lista_objetos is None or not isinstance(lista_objetos, Iterable) or len(lista_objetos) == 0:
+        if (lista_objetos is None or
+                not isinstance(lista_objetos, Iterable) or len(lista_objetos) == 0):
             return None
         return self.collection.insert_many(
             self.clase.generar_list_dicts_from_list_objects(

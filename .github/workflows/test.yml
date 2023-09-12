@@ -25,7 +25,6 @@ jobs:
           mongodb-username: testMongoManager
           mongodb-password: testMongoManager
           mongodb-db: testMongoManager
-          args: testMongoManager
 
       - name: Install dependencies
         run: |
