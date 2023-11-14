@@ -16,26 +16,16 @@ class MongoManager(metaclass=SingletonMeta):
         """
         Crea la instancia conectada a la collecion en cuestion.
         """
-        self.__bd = None
         if bd_online:
-            self.__bd = MongoClient(url_online)
+            url = url_online
         else:
             if authenticated:
-                if auth_source == '':
-                    self.__bd = \
-                        MongoClient('mongodb://{}:{}@localhost:{}'.format(username,
-                                                                          password,
-                                                                          port_local)
-                                    )
-                else:
-                    self.__bd = \
-                        MongoClient('mongodb://{}:{}@localhost:{}'.format(username,
-                                                                          password,
-                                                                          port_local),
-                                    authSource=auth_source)
+                url = f'mongodb://{username}:{password}@localhost:{port_local}'
             else:
-                self.__bd = MongoClient('mongodb://localhost:{}'.format(port_local))
-        self.__bd = self.__bd[db]
+                url = f'mongodb://localhost:{port_local}'
+        self.__client = MongoClient(url, authSource=auth_source) \
+            if authenticated and auth_source != '' else MongoClient(url)
+        self.__bd = self.__client[db]
         global _mongo_manager_gl
         _mongo_manager_gl = self
 

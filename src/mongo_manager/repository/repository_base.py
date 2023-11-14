@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from typing import TypeVar, Type, Generic, Optional
 
 import pymongo
-from pymongo.results import UpdateResult, InsertManyResult,\
+from pymongo.results import UpdateResult, InsertManyResult, \
     InsertOneResult, DeleteResult
 
 from .. import ObjetoMongoAbstract, MongoManagerException
@@ -20,7 +20,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def __init__(self, collection: str, clase: Type[T_O],
                  connection_collection=None) -> None:
-        __metaclass__ = SingletonMeta # noqa: F841
+        __metaclass__ = SingletonMeta  # noqa: F841
         if connection_collection is None:
             from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
             if mongo_manager_gl is None:
@@ -103,7 +103,10 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             return None
         return self.collection.insert_many(
             self.clase.generar_list_dicts_from_list_objects(
-                lista_objetos,id_mongo=id_mongo))
+                lista_objetos, id_mongo=id_mongo))
+
+    def insert_one_raw(self, object_dict: dict):
+        return self.insert_one(self.clase.generar_object_from_dict(object_dict))
 
     def insert_or_replace_id(self, objeto: T_O):
         if objeto.id is None:
@@ -133,7 +136,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             out = [match] + out
         return self.collection.aggregate(out)
 
-    def drop_collection(self, drop=False):
+    def drop_collection(self, *, drop=False):
         if not drop:
             raise MongoManagerException('Medida de seguridad, fallo al '
                                         'intentar eliminar la coleccion\n'

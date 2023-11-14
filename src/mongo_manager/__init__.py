@@ -1,4 +1,4 @@
-from .exceptions import MongoManagerException,\
+from .exceptions import MongoManagerException, \
     MongoManagerAggregationException
 from .mongo_manager import MongoManager
 from .entity import ObjetoMongoAbstract
@@ -12,6 +12,6 @@ MONGO_MANAGER_DESCENDING = -1
 ObjectMongoAbstract = ObjetoMongoAbstract
 
 __all__ = ['MongoManagerException', 'MongoManagerAggregationException',
-           'MongoManager', 'ObjetoMongoAbstract',
+           'MongoManager',
            'ObjetoMongoAbstract', 'RepositoryBase',
            'MONGO_MANAGER_ASCENDING', 'MONGO_MANAGER_DESCENDING']
