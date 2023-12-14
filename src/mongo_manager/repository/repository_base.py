@@ -71,15 +71,15 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             filter_dict))
 
     def find_many(self, filter_dict: dict = None,
-                  skip=0, limit=1000, sort=None) -> list[T_O]:
+                  skip: int = 0, limit: int = 1000, sort=None) -> list[T_O]:
         if filter_dict is None:
             filter_dict = {}
-        lista_obj = self.collection.find(filter_dict).skip(skip).limit(limit)
+        object_list = self.collection.find(filter_dict).skip(skip).limit(limit if limit != -1 else 0)
         if sort is not None:
-            lista_obj.sort(sort)
-        return self.clase.generar_objects_from_list_dicts(lista_obj)
+            object_list.sort(sort)
+        return self.clase.generar_objects_from_list_dicts(object_list)
 
-    def find_all(self, skip=0, limit=1000, sort=None) -> list[T_O]:
+    def find_all(self, skip: int = 0, limit: int = 1000, sort=None) -> list[T_O]:
         return self.find_many(skip=skip, limit=limit, sort=sort)
 
     def find_by_id(self, id_mongo) -> T_O:
@@ -97,25 +97,29 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         return self.collection.insert_one(objeto.get_dict_no_id()
                                           if not id_mongo else objeto.get_dict())
 
-    def insert_many(self, lista_objetos: list[T_O], id_mongo=False) -> InsertManyResult | None:
-        if (lista_objetos is None or
-                not isinstance(lista_objetos, Iterable) or len(lista_objetos) == 0):
+    def insert_many(self, object_list: list[T_O], id_mongo=False) -> InsertManyResult | None:
+        if (object_list is None or
+                not isinstance(object_list, Iterable) or len(object_list) == 0):
             return None
         return self.collection.insert_many(
             self.clase.generar_list_dicts_from_list_objects(
-                lista_objetos, id_mongo=id_mongo))
+                object_list, id_mongo=id_mongo))
 
     def insert_one_raw(self, object_dict: dict):
         return self.insert_one(self.clase.generar_object_from_dict(object_dict))
 
-    def insert_or_replace_id(self, objeto: T_O):
-        if objeto.id is None:
-            return self.insert_one(objeto)
-        else:
-            return self.replace_by_id(objeto.id, objeto)
+    def insert_or_replace_id(self, objeto: T_O, upsert: bool = True):
+        return self._replace_by_id(objeto.id, objeto, upsert)
 
     def replace_by_id(self, id_mongo, objeto: T_O) -> UpdateResult:
-        return self.collection.replace_one({"_id": id_mongo}, objeto.get_dict())
+        return self._replace_by_id(id_mongo, objeto, False)
+
+    def _replace_by_id(self, id_mongo, objeto: T_O, upsert: bool = False) -> UpdateResult:
+        return self.collection.replace_one({"_id": id_mongo}, objeto.get_dict(), upsert)
+
+    def replace_many_by_id(self, object_list: list[T_O], upsert: bool = False):
+        for x in object_list:
+            self._replace_by_id(x.id, x, upsert)
 
     def update_by_id(self, id_mongo, objeto_dict: dict) -> UpdateResult:
         return self.collection.update_one({"_id": id_mongo}, {"$set": objeto_dict})
@@ -129,10 +133,10 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         self.collection.update_many(filter_dict, {"$set": objeto_dict})
 
     def copy_collection_db(self, name_new_collection: str,
-                           condicion_copia: dict = None):
+                           copy_match_condition: dict = None):
         out = [aggregate_out(name_new_collection)]
-        if condicion_copia is not None:
-            match = aggregate_match(condicion_copia)
+        if copy_match_condition is not None:
+            match = aggregate_match(copy_match_condition)
             out = [match] + out
         return self.collection.aggregate(out)
 
