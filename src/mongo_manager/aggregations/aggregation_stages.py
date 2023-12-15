@@ -1,6 +1,6 @@
 from abc import ABC
 
-from .aggregation_functions import AggregationFunction, AggregationFunctionDict,\
+from .aggregation_functions import AggregationFunction, AggregationFunctionDict, \
     AggregationFunctionValue
 
 
@@ -69,14 +69,24 @@ class AggStUnwind(AggregationFunctionValue, AggregationStage):
         super().__init__(unwind_value)
 
 
-class AggStSort(AggregationFunctionValue, AggregationStage):
+class AggStSort(AggregationFunctionDict, AggregationStage):
+
+    def __init__(self, mapping: dict = None):
+        super().__init__()
+        if mapping is None:
+            mapping = {}
+        self.data = {self.key_word(): mapping}
 
     @classmethod
     def key_word(cls) -> str:
         return '$sort'
 
-    def __init__(self, unwind_value: str):
-        super().__init__(unwind_value)
+    def add_fields(self, sorted_dict: dict):
+        for x, y in sorted_dict.items():
+            self[x] = y
+
+    def add_field(self, field: str, asc: bool):
+        self[field] = 1 if asc else -1
 
 
 class AggStOut(AggregationFunctionValue, AggregationStage):
