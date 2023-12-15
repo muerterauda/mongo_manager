@@ -5,7 +5,7 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 [project]
-name = "mongo_manager"
+name = "mongo_manager_juan_palma_borda"
 version = "0.9.7"
 authors = [
     {name = "Juan Palma Borda", email = "juanpalmaborda@hotmail.com"},
