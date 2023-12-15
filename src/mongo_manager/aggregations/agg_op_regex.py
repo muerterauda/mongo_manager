@@ -1,4 +1,4 @@
-from typing import re
+import re
 
 from .aggregation_functions import AggregationFunctionValue
 from .agreggation_operations import AggregationOperation
