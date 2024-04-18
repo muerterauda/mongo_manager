@@ -2,8 +2,7 @@ import _collections_abc
 from typing import List, Union
 
 import pymongo.collection
-from pymongo.cursor import Cursor
-
+from pymongo.command_cursor import CommandCursor
 from . import AggregationStage
 
 
@@ -39,7 +38,7 @@ class AggregationExecutor:
     def add_steps_list(self, steps=List[Union[AggregationStage, dict]]):
         self.__query.extend(steps)
 
-    def execute(self) -> Union[Cursor, None]:
+    def execute(self) -> Union[CommandCursor, None]:
         if len(self.__query) == 0:
             return None
         return self.__collection.aggregate(self.__query)

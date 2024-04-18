@@ -1,10 +1,7 @@
 name: Test MongoManager
 run-name: Python Tests on push commit to ${{ inputs.deploy_target }} by @${{ github.actor }}
-#on: [push]
-on:
-  push:
-    branches:
-      - development
+on: [push]
+
 jobs:
   build:
 

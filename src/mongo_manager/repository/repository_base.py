@@ -24,13 +24,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         if connection_collection is None:
             from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
             if mongo_manager_gl is None:
-                raise MongoManagerException(
-                    '\nNo se ha inicializado la base de datos, '
-                    'crear con MongoManager(), '
-                    'ni se ha dado una conexion al repositorio.'
-                    '\nMongoManager is not initialized, '
-                    'create it with MongoManager(), '
-                    'or provide a different connection to the repository.')
+                raise MongoManagerException()
             connection_collection = mongo_manager_gl.collection(collection)
         self.__collection = connection_collection
         self.__clase = clase

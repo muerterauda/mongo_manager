@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import json
 from abc import ABC
+from typing import Callable
 
 from bson import ObjectId
 from pymongo.cursor import Cursor
+
+from src.mongo_manager.exceptions import MongoManagerGridFSException
 
 
 class ObjetoMongoAbstract(ABC):
@@ -114,3 +117,31 @@ class ObjetoMongoAbstract(ABC):
         @return: dict format {name_attr: class_attr}
         """
         return {}
+
+    @staticmethod
+    def _load_repo_gridfs(collection: str, base=False):
+        if base:
+            from ..repository.repository_gridfs import RepositoryGridFSBase as RepoGrid
+        else:
+            from ..repository.repository_gridfs import RepositoryGridFSDict as RepoGrid
+        return RepoGrid(collection=collection)
+
+    @staticmethod
+    def load_gridfs(attr, repository=None, base=False, force=False):
+        if repository is None:
+            repository = ObjetoMongoAbstract._load_repo_gridfs(attr[0], base)
+        if not force and repository.collection_name is not attr[0]:
+            raise MongoManagerGridFSException('La coleccion del repositorio no se corresponde con la del objeto')
+        elif force and repository.collection_name is not attr[0]:
+            return repository.find_by_name_last(attr[2])
+        else:
+            return repository.find_by_id(attr[1])
+
+    @staticmethod
+    def generate_gridfs(name_attr: str, file, collection: str, base: bool = False, custom_function: Callable = None):
+        repo = ObjetoMongoAbstract._load_repo_gridfs(collection, base=base)
+        if custom_function is not None:
+            id_gridfs_object = repo.insert_one_custom(name_attr, file, custom_function)
+        else:
+            id_gridfs_object = repo.insert_one(name_attr, file)
+        setattr(name_attr, name_attr, (collection, id_gridfs_object, name_attr))
