@@ -19,4 +19,5 @@ __all__ = [
     'MongoManagerException', 'MongoManagerAggregationException', 'MongoManagerGridFSException',
     'MongoManager',
     'ObjetoMongoAbstract', 'RepositoryBase',
+    'RepositoryGridFSBase', 'RepositoryGridFSDict',
     'MONGO_MANAGER_ASCENDING', 'MONGO_MANAGER_DESCENDING']

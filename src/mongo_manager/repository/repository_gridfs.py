@@ -43,7 +43,7 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         return self.__collection_name
 
     def find_raw_by_id(self, file_id) -> GridOut:
-        if type(file_id) is str:
+        if isinstance(file_id, str):
             file_id = ObjectId(file_id)
         return self.__connection_collection_grid.get(file_id)
 
