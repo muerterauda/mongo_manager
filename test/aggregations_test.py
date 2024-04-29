@@ -1,7 +1,8 @@
+from mongo_manager import RepositoryBase
+from mongo_manager.aggregations import (agg_de, agg_st,
+                                        AggregationExecutor)
+
 from test.abstract_mongo_manager_test import AbstractMongoManagerTest
-from src.mongo_manager import RepositoryBase
-from src.mongo_manager.aggregations import (agg_de, agg_st,
-                                            AggregationExecutor)
 from test.classes_test import Book
 
 

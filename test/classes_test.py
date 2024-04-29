@@ -1,4 +1,4 @@
-from src.mongo_manager import ObjetoMongoAbstract
+from mongo_manager import ObjetoMongoAbstract
 
 
 class Book(ObjetoMongoAbstract):

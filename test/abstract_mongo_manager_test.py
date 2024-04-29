@@ -1,7 +1,7 @@
 import unittest
 from abc import ABC
 
-from src.mongo_manager import MongoManager
+from mongo_manager import MongoManager
 
 
 class AbstractMongoManagerTest(unittest.TestCase, ABC):
