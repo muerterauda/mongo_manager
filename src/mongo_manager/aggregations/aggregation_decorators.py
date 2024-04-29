@@ -1,3 +1,4 @@
+from __future__ import annotations
 import functools
 import logging
 from typing import List, Union
@@ -5,7 +6,7 @@ from typing import List, Union
 import pymongo
 from pymongo.cursor import Cursor
 
-from . import LOG_NAME_AGG, AggregationExecutor
+from mongo_manager.aggregations import LOG_NAME_AGG, AggregationExecutor
 
 
 def aggregation_decorator(function):

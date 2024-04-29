@@ -6,8 +6,8 @@ import gridfs
 from bson import ObjectId
 from gridfs import GridOut
 
-from .. import MongoManagerException
-from ..patrones import SingletonMeta
+from mongo_manager import MongoManagerException
+from mongo_manager.patrones import SingletonMeta
 
 T_GRID = TypeVar('T_GRID')
 
@@ -20,7 +20,7 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
                  connection_database=None) -> None:
         __metaclass__ = SingletonMeta  # noqa: F841
         if connection_database is None:
-            from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
+            from mongo_manager.mongo_manager_base import _mongo_manager_gl as mongo_manager_gl
             if mongo_manager_gl is None:
                 raise MongoManagerException()
             connection_database = mongo_manager_gl.bd

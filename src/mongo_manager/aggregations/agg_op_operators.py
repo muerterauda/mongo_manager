@@ -1,9 +1,11 @@
+from __future__ import annotations
 from abc import ABC
 from typing import List
 
-from .agreggation_operations import AggregationOperation
-from .aggregation_functions import AggregationFunctionValue, AggregationFunctionList, \
-    AggregationFunctionDict
+from mongo_manager.aggregations.agreggation_operations import AggregationOperation
+from mongo_manager.aggregations.aggregation_functions import (AggregationFunctionValue,
+                                                              AggregationFunctionList,
+                                                              AggregationFunctionDict)
 
 
 class _AggregationOperationString(AggregationFunctionValue,

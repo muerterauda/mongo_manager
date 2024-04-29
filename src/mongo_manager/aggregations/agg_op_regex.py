@@ -1,7 +1,8 @@
+from __future__ import annotations
 import re
 
-from .aggregation_functions import AggregationFunctionValue
-from .agreggation_operations import AggregationOperation
+from mongo_manager.aggregations.aggregation_functions import AggregationFunctionValue
+from mongo_manager.aggregations.agreggation_operations import AggregationOperation
 
 
 class AggOpRegex(AggregationOperation):

@@ -1,10 +1,7 @@
-from typing import TypeVar
-
-from .exceptions import MongoManagerException, \
-    MongoManagerAggregationException, MongoManagerGridFSException
-from .mongo_manager import MongoManager
-from .entity import ObjetoMongoAbstract
-from .repository import RepositoryBase, RepositoryGridFSBase, RepositoryGridFSDict
+from mongo_manager.exceptions import MongoManagerException, MongoManagerGridFSException, MongoManagerAggregationException
+from mongo_manager.mongo_manager_base import MongoManager
+from mongo_manager.entity import ObjetoMongoAbstract
+from mongo_manager.repository import RepositoryBase, RepositoryGridFSBase, RepositoryGridFSDict, T_GRID_TYPE
 
 MONGO_MANAGER_ASCENDING = 1
 """Ascending sort order."""
@@ -13,11 +10,10 @@ MONGO_MANAGER_DESCENDING = -1
 
 ObjectMongoAbstract = ObjetoMongoAbstract
 
-T_REPO_GRIDFS = TypeVar('T_REPO_GRIDFS', bound=RepositoryGridFSBase)
-
 __all__ = [
-    'MongoManagerException', 'MongoManagerAggregationException', 'MongoManagerGridFSException',
+    'MongoManagerException', 'MongoManagerAggregationException',
+    'MongoManagerGridFSException',
     'MongoManager',
     'ObjetoMongoAbstract', 'RepositoryBase',
-    'RepositoryGridFSBase', 'RepositoryGridFSDict',
+    'RepositoryGridFSBase', 'RepositoryGridFSDict', 'T_GRID_TYPE',
     'MONGO_MANAGER_ASCENDING', 'MONGO_MANAGER_DESCENDING']

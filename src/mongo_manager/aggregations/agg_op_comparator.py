@@ -1,8 +1,9 @@
+from __future__ import annotations
 from abc import ABC
 
-from .aggregation_functions import \
+from mongo_manager.aggregations.aggregation_functions import \
     AggregationFunctionValue, AggregationFunctionList
-from .agreggation_operations import AggregationOperation
+from mongo_manager.aggregations.agreggation_operations import AggregationOperation
 
 
 class _AggregationOperationProjectComparison(AggregationOperation,

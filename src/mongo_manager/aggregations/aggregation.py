@@ -1,9 +1,10 @@
+from __future__ import annotations
 import _collections_abc
 from typing import List, Union
 
 import pymongo.collection
 from pymongo.command_cursor import CommandCursor
-from . import AggregationStage
+from mongo_manager.aggregations import AggregationStage
 
 
 def _pretty_query(query, total_tab='\t') -> str:

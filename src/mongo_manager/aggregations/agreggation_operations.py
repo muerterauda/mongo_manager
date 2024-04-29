@@ -1,6 +1,7 @@
+from __future__ import annotations
 from abc import ABC
 
-from .aggregation_functions import AggregationFunction
+from mongo_manager.aggregations.aggregation_functions import AggregationFunction
 
 
 class AggregationOperation(AggregationFunction, ABC):

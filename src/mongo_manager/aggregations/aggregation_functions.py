@@ -1,9 +1,10 @@
+from __future__ import annotations
 import logging
 from abc import ABC, abstractmethod
 from collections import UserDict
 
-from . import LOG_NAME_AGG
-from ..exceptions import MongoManagerAggregationException
+from mongo_manager import MongoManagerAggregationException
+from mongo_manager.aggregations import LOG_NAME_AGG
 
 
 class AggregationFunction(UserDict, ABC):

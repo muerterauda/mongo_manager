@@ -1,9 +1,7 @@
 from abc import ABC
 from typing import Callable
 
-from .objeto_mongo_abstract import ObjetoMongoAbstract
-from .. import MongoManagerGridFSException
-from ..repository import T_GRID_TYPE
+from mongo_manager import ObjetoMongoAbstract, MongoManagerGridFSException, T_GRID_TYPE
 
 
 class ObjetoMongoAbstractGridFS(ObjetoMongoAbstract, ABC):

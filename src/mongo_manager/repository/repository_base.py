@@ -7,10 +7,10 @@ import pymongo
 from pymongo.results import UpdateResult, InsertManyResult, \
     InsertOneResult, DeleteResult
 
-from .. import ObjetoMongoAbstract, MongoManagerException
-from ..patrones import SingletonMeta
-from ..aggregations.aggregation import AggregationExecutor
-from ..mongo_utils import aggregate_out, aggregate_match
+from mongo_manager import ObjetoMongoAbstract, MongoManagerException
+from mongo_manager.patrones import SingletonMeta
+from mongo_manager.aggregations.aggregation import AggregationExecutor
+from mongo_manager.mongo_utils import aggregate_out, aggregate_match
 from bson import ObjectId
 
 T_O = TypeVar('T_O', bound=ObjetoMongoAbstract)
@@ -22,7 +22,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
                  connection_collection=None) -> None:
         __metaclass__ = SingletonMeta  # noqa: F841
         if connection_collection is None:
-            from ..mongo_manager import _mongo_manager_gl as mongo_manager_gl
+            from mongo_manager.mongo_manager_base import _mongo_manager_gl as mongo_manager_gl
             if mongo_manager_gl is None:
                 raise MongoManagerException()
             connection_collection = mongo_manager_gl.collection(collection)
