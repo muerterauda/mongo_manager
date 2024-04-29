@@ -2,12 +2,9 @@ from __future__ import annotations
 
 import json
 from abc import ABC
-from typing import Callable
 
 from bson import ObjectId
 from pymongo.cursor import Cursor
-
-from src.mongo_manager.exceptions import MongoManagerGridFSException
 
 
 class ObjetoMongoAbstract(ABC):
@@ -21,15 +18,16 @@ class ObjetoMongoAbstract(ABC):
     def id(self) -> ObjectId:
         return self._id
 
-    def get_dict(self, id_mongo=True, id_as_string=False) -> dict:
+    def get_dict(self, id_mongo=True, id_as_string=False, include_private_false=False) -> dict:
         """
         Return all variables from this object, similar to vars(object)
          with exception for _id
         @param id_mongo: True -> Return dict with _id
         @param id_as_string: True -> Return _id as str if id_mongo is True
+        @param include_private_false: True -> Return private vars
         @return: dict with object variables, similar to vars(object)
         """
-        d = vars(self).copy()
+        d = {k: v for k, v in vars(self).items() if not (k.startswith('_') and '__' in k)}
         if not id_mongo:
             d.pop('_id')
         elif id_as_string and self._id is not None:
@@ -117,31 +115,3 @@ class ObjetoMongoAbstract(ABC):
         @return: dict format {name_attr: class_attr}
         """
         return {}
-
-    @staticmethod
-    def _load_repo_gridfs(collection: str, base=False):
-        if base:
-            from ..repository.repository_gridfs import RepositoryGridFSBase as RepoGrid
-        else:
-            from ..repository.repository_gridfs import RepositoryGridFSDict as RepoGrid
-        return RepoGrid(collection=collection)
-
-    @staticmethod
-    def load_gridfs(attr, repository=None, base=False, force=False):
-        if repository is None:
-            repository = ObjetoMongoAbstract._load_repo_gridfs(attr[0], base)
-        if not force and repository.collection_name is not attr[0]:
-            raise MongoManagerGridFSException('La coleccion del repositorio no se corresponde con la del objeto')
-        elif force and repository.collection_name is not attr[0]:
-            return repository.find_by_name_last(attr[2])
-        else:
-            return repository.find_by_id(attr[1])
-
-    @staticmethod
-    def generate_gridfs(name_attr: str, file, collection: str, base: bool = False, custom_function: Callable = None):
-        repo = ObjetoMongoAbstract._load_repo_gridfs(collection, base=base)
-        if custom_function is not None:
-            id_gridfs_object = repo.insert_one_custom(name_attr, file, custom_function)
-        else:
-            id_gridfs_object = repo.insert_one(name_attr, file)
-        setattr(name_attr, name_attr, (collection, id_gridfs_object, name_attr))

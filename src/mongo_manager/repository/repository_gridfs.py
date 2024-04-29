@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Callable, TypeVar, Generic, Any, IO
 import json
 import gridfs
+from bson import ObjectId
 from gridfs import GridOut
 
 from .. import MongoManagerException
@@ -42,6 +43,8 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         return self.__collection_name
 
     def find_raw_by_id(self, file_id) -> GridOut:
+        if type(file_id) is str:
+            file_id = ObjectId(file_id)
         return self.__connection_collection_grid.get(file_id)
 
     def find_raw_by_name_last(self, name) -> GridOut:
@@ -82,6 +85,9 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         return self.__connection_collection_grid.put(custom_func(x), filename=filename,
                                                      **kwargs)
 
+    def delete_by_id(self, file_id):
+        return self.__connection_collection_grid.delete(file_id)
+
     @staticmethod
     def _convert_function(x) -> IO:
         return x
@@ -110,3 +116,6 @@ class RepositoryGridFSDict(RepositoryGridFSBase[dict], metaclass=SingletonMeta):
 
     def _aditional_arguments_insert(self) -> dict:
         return {'encoding': self.encoding}
+
+
+T_GRID_TYPE = TypeVar('T_GRID_TYPE', bound=RepositoryGridFSBase)

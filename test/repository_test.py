@@ -5,13 +5,14 @@ from test.classes_test import Book
 
 class RepositoryBook(RepositoryBase[Book]):
     def __init__(self) -> None:
-        super().__init__('book', Book)
+        super().__init__('bookTest', Book)
 
 
 class TestRepository(AbstractMongoManagerTest):
 
     def setUp(self) -> None:
         self.repo = RepositoryBook()
+        self.repo.drop_collection(drop=True)
 
     def tearDown(self) -> None:
         self.repo.drop_collection(drop=True)

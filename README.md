@@ -19,6 +19,10 @@ objeto Mongo y **kwargs con los argumentos desechados por el
 constructor concreto de tu clase. Es recomendable llamar al contructor 
 padre para establecer los atributos.
 
+### Geospatial Object
+
+Por ser redactado
+
 ### Objetos internos
 
 En caso de tener objetos interno dentro del objeto principal es necesario
@@ -39,6 +43,10 @@ los resultados de las query que se realicen.
 En caso de querer usar una coleccion no perteneciente a la base de datos instanciada,
 se puede pasar el atributo *connection_collection* que debe ser una instancia de la conexion 
 *MongoClient* para la coleccion a tratar por el repositorio.
+
+### RepositoryGridFSBase y RepositoryGridFSDict
+
+Por ser redactado
 
 ## Ejemplo 1
 
@@ -131,3 +139,7 @@ el formato {name: book_name_group, counter: total_books}:
                return agg
 
  - Usando los antigüos metodos definidos en el _mongo_utils.py_ que sirven de ayuda para poder generar los aggregates.
+
+### GridFS
+
+Por ser redactado
