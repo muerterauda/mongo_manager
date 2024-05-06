@@ -1,3 +1,3 @@
-from .singleton import SingletonMeta
+from mongo_manager.patrones.singleton import SingletonMeta
 
 __all__ = ['SingletonMeta']

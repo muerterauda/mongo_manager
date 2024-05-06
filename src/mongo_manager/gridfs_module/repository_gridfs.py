@@ -4,7 +4,6 @@ from typing import Callable, TypeVar, Generic, Any, IO
 import json
 import gridfs
 from bson import ObjectId
-from gridfs import GridOut
 
 from mongo_manager import MongoManagerException
 from mongo_manager.patrones import SingletonMeta
@@ -42,15 +41,15 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         """
         return self.__collection_name
 
-    def find_raw_by_id(self, file_id) -> GridOut:
+    def find_raw_by_id(self, file_id) -> gridfs.GridOut:
         if isinstance(file_id, str):
             file_id = ObjectId(file_id)
         return self.__connection_collection_grid.get(file_id)
 
-    def find_raw_by_name_last(self, name) -> GridOut:
+    def find_raw_by_name_last(self, name) -> gridfs.GridOut:
         return self.__connection_collection_grid.get_last_version(name)
 
-    def find_raw_by_name_version(self, name, version) -> GridOut:
+    def find_raw_by_name_version(self, name, version) -> gridfs.GridOut:
         return self.__connection_collection_grid.get_version(name, version)
 
     def find_by_id(self, file_id) -> T_OUT:
@@ -63,15 +62,15 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         return self._reconvert_function(self.find_by_name_version(name, version))
 
     def find_by_id_custom_return(self, file_id,
-                                 custom_return: Callable[[GridOut], T_GRID]) -> T_GRID:
+                                 custom_return: Callable[[gridfs.GridOut], T_GRID]) -> T_GRID:
         return custom_return(self.find_raw_by_id(file_id))
 
     def find_by_name_last_custom_return(self, name,
-                                        custom_return: Callable[[GridOut], T_GRID]) -> T_GRID:
+                                        custom_return: Callable[[gridfs.GridOut], T_GRID]) -> T_GRID:
         return custom_return(self.find_by_name_last(name))
 
     def find_by_name_version_custom_return(self, name, version,
-                                           custom_return: Callable[[GridOut], T_GRID]) -> T_GRID:
+                                           custom_return: Callable[[gridfs.GridOut], T_GRID]) -> T_GRID:
         return custom_return(self.find_by_name_version(name, version))
 
     def insert_one_raw(self, x, filename: str, **kwargs) -> Any:
@@ -96,7 +95,7 @@ class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
         return {}
 
     @staticmethod
-    def _reconvert_function(x: GridOut) -> T_OUT:
+    def _reconvert_function(x: gridfs.GridOut) -> T_OUT:
         return x
 
 
@@ -111,7 +110,7 @@ class RepositoryGridFSDict(RepositoryGridFSBase[dict], metaclass=SingletonMeta):
         return json.dumps(x) if x is not None else x
 
     @staticmethod
-    def _reconvert_function(x: GridOut) -> dict:
+    def _reconvert_function(x: gridfs.GridOut) -> dict:
         return json.loads(x.read()) if x is not None else x
 
     def _aditional_arguments_insert(self) -> dict:

@@ -1,7 +1,8 @@
-from mongo_manager.exceptions import MongoManagerException, MongoManagerGridFSException, MongoManagerAggregationException
+from mongo_manager.exceptions import (MongoManagerException,
+                                      MongoManagerGridFSException,
+                                      MongoManagerAggregationException)
 from mongo_manager.mongo_manager_base import MongoManager
-from mongo_manager.entity import ObjetoMongoAbstract
-from mongo_manager.repository import RepositoryBase, RepositoryGridFSBase, RepositoryGridFSDict, T_GRID_TYPE
+from mongo_manager.base_module import ObjetoMongoAbstract, RepositoryBase
 
 MONGO_MANAGER_ASCENDING = 1
 """Ascending sort order."""
@@ -15,5 +16,4 @@ __all__ = [
     'MongoManagerGridFSException',
     'MongoManager',
     'ObjetoMongoAbstract', 'RepositoryBase',
-    'RepositoryGridFSBase', 'RepositoryGridFSDict', 'T_GRID_TYPE',
     'MONGO_MANAGER_ASCENDING', 'MONGO_MANAGER_DESCENDING']

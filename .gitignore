@@ -1,4 +1,5 @@
 # Especificos
+src/mongo_manager/test
 main_test.py
 A.py
 B.py

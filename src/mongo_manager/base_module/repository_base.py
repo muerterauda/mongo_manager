@@ -6,12 +6,13 @@ from typing import TypeVar, Type, Generic, Optional
 import pymongo
 from pymongo.results import UpdateResult, InsertManyResult, \
     InsertOneResult, DeleteResult
+from bson import ObjectId
 
-from mongo_manager import ObjetoMongoAbstract, MongoManagerException
+from mongo_manager import MongoManagerException
 from mongo_manager.patrones import SingletonMeta
+from mongo_manager.base_module.objeto_mongo_abstract import ObjetoMongoAbstract
 from mongo_manager.aggregations.aggregation import AggregationExecutor
 from mongo_manager.mongo_utils import aggregate_out, aggregate_match
-from bson import ObjectId
 
 T_O = TypeVar('T_O', bound=ObjetoMongoAbstract)
 
