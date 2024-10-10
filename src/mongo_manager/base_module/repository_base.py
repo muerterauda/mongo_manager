@@ -21,6 +21,13 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def __init__(self, collection: str, clase: Type[T_O],
                  connection_collection=None) -> None:
+        """
+        @:param collection: Name of collection to be accessed by the repository
+        @:param clase: Type of the object to be returned by the Repository, it has to inherit from ObjetoMongoAbstract.
+        @:param connection_collection: Default None. If set ignore collection,
+         it allows the repostory to access other databases.
+        Singleton of the repository.
+        """
         __metaclass__ = SingletonMeta  # noqa: F841
         if connection_collection is None:
             from mongo_manager.mongo_manager_base import _mongo_manager_gl as mongo_manager_gl
@@ -49,17 +56,31 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         return AggregationExecutor(collection_to_execute=self.collection)
 
     def count_many(self, filter_dict: dict = None) -> int:
+        """
+        @:param filter_dict: Filter for the count
+        @return: Number of objects in the collection that meet this condition,
+         use the count_documents method of pymongo.
+        """
         if filter_dict is None:
             filter_dict = {}
         return self.collection.count_documents(filter_dict)
 
     def count_all(self) -> int:
+        """
+        @return: Number of objects in the collection,
+         use the count_documents method of pymongo.
+        """
         return self.collection.count_documents({})
 
     def estimated_count(self) -> int:
+        """
+        @return: Estimated number of objects in the collection,
+         use the estimated_document_count method of pymongo, not transaction allowed.
+        """
         return self.collection.estimated_document_count()
 
     def find_one(self, filter_dict: dict = None) -> T_O:
+
         if filter_dict is None:
             filter_dict = {}
         return self.clase.generar_object_from_dict(self.collection.find_one(
@@ -87,6 +108,17 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
 
     def delete_by_id(self, id_mongo) -> DeleteResult:
         return self.collection.delete_one({'_id': ObjectId(id_mongo)})
+
+    def delete_many(self,  filter_dict: dict = None, *, remove=False) -> DeleteResult:
+        if not remove:
+            raise MongoManagerException('Medida de seguridad, fallo al '
+                                        'intentar eliminar un conjunto de objetos, '
+                                        'no se ha establecido el valor de remove a True\n'
+                                        'Security fail, try to remove a bunch of object avoided, '
+                                        'parameter remove was not set to True')
+        if filter_dict is None:
+            filter_dict = {}
+        return self.collection.delete_many(filter_dict)
 
     def insert_one(self, objeto: T_O, id_mongo=False) -> InsertOneResult:
         return self.collection.insert_one(objeto.get_dict_no_id()

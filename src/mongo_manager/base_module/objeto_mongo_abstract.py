@@ -27,7 +27,10 @@ class ObjetoMongoAbstract(ABC):
         @param include_private_false: True -> Return private vars
         @return: dict with object variables, similar to vars(object)
         """
-        d = {k: v for k, v in vars(self).items() if not (k.startswith('_') and '__' in k)}
+        if include_private_false:
+            d = vars(self).copy()
+        else:
+            d = {k: v for k, v in vars(self).items() if not (k.startswith('_') and '__' in k)}
         if not id_mongo:
             d.pop('_id')
         elif id_as_string and self._id is not None:
@@ -42,35 +45,40 @@ class ObjetoMongoAbstract(ABC):
                 d[x] = d[x].get_dict(False, False)
         return d
 
-    def get_dict_no_id(self) -> dict:
+    def get_dict_no_id(self, include_private_false=False) -> dict:
         """
-        Facade for get_dict(id_mongo=False). Return all variables from this object,
+        Facade for get_dict(id_mongo=False, include_private_false=include_private_false).
+        Return all variables from this object,
          similar to vars(object)
          with exception for _id
         @return: dict with object variables, similar to vars(object)
         """
-        return self.get_dict(id_mongo=False)
+        return self.get_dict(id_mongo=False, include_private_false=include_private_false)
 
-    def serialize(self, id_mongo=True) -> str:
+    def serialize(self, id_mongo=True, include_private_false=False) -> str:
         """
         Serialize object to JSON format
         @param id_mongo: True -> Append _id to json
+        @param include_private_false: True -> Return private vars
         @return: str in Json format
         """
-        return json.dumps(self.get_dict(id_mongo=id_mongo, id_as_string=True))
+        return json.dumps(self.get_dict(id_mongo=id_mongo, id_as_string=True,
+                                        include_private_false=include_private_false))
 
     @staticmethod
-    def serialize_all(objetos, id_mongo=True) -> str:
+    def serialize_all(objetos, id_mongo=True, include_private_false=False) -> str:
         """
         Serialize all objects to JSON format
         @param objetos: List for object to convert to JSON
         @param id_mongo: True -> Append _id to json
+        @param include_private_false: True -> Return private vars
         @return: str in Json format
         """
         return json.dumps(
             ObjetoMongoAbstract.generar_list_dicts_from_list_objects(objetos,
                                                                      id_mongo=id_mongo,
-                                                                     id_as_string=True))
+                                                                     id_as_string=True,
+                                                                     include_private_false=include_private_false))
 
     @staticmethod
     def prepare_dict_for_generated_object(dictionary: dict, attr: dict) -> dict:
@@ -92,7 +100,7 @@ class ObjetoMongoAbstract(ABC):
             dictionary, cls.get_attr_nested_objects()))
 
     def __repr__(self):
-        return str(self.get_dict(True, True))
+        return str(self.get_dict(True, True, include_private_false=True))
 
     def __str__(self):
         return f'Class: {self.__class__.__name__} -> ObjectID {self._id}'
@@ -103,8 +111,9 @@ class ObjetoMongoAbstract(ABC):
 
     @staticmethod
     def generar_list_dicts_from_list_objects(lista_objetos: list,
-                                             id_mongo=True, id_as_string=False):
-        return [c.get_dict(id_mongo=id_mongo, id_as_string=id_as_string)
+                                             id_mongo=True, id_as_string=False,
+                                             include_private_false=False) -> list:
+        return [c.get_dict(id_mongo=id_mongo, id_as_string=id_as_string, include_private_false=include_private_false)
                 for c in lista_objetos]
 
     @staticmethod
