@@ -1,8 +1,10 @@
 import geojson
 
 from mongo_manager import ObjetoMongoAbstract
+from mongo_manager.utils.decoradores import experimental_stage
 
 
+@experimental_stage("alpha")
 class GeoJsonObjetoMongoAbstract(ObjetoMongoAbstract):
 
     def __init__(self, _id=None, **kwargs):

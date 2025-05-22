@@ -3,8 +3,10 @@ from typing import Callable
 
 from mongo_manager import ObjetoMongoAbstract, MongoManagerGridFSException
 from mongo_manager.gridfs_module.repository_gridfs import T_GRID_TYPE
+from mongo_manager.utils.decoradores import experimental_stage
 
 
+@experimental_stage("beta")
 class ObjetoMongoAbstractGridFS(ObjetoMongoAbstract, ABC):
 
     def __init__(self, _id=None, _grid_objects: list = None, **kwargs):

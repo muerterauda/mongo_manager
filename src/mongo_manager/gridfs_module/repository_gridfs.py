@@ -7,12 +7,14 @@ from bson import ObjectId
 
 from mongo_manager import MongoManagerException
 from mongo_manager.patrones import SingletonMeta
+from mongo_manager.utils.decoradores import experimental_stage
 
 T_GRID = TypeVar('T_GRID')
 
 T_OUT = TypeVar('T_OUT')
 
 
+@experimental_stage("beta")
 class RepositoryGridFSBase(Generic[T_OUT], metaclass=SingletonMeta):
 
     def __init__(self, collection: str,

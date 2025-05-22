@@ -18,6 +18,17 @@ class ObjetoMongoAbstract(ABC):
     def id(self) -> ObjectId:
         return self._id
 
+    @id.setter
+    def id(self, value):
+        if value is None:
+            self._id = None
+        elif isinstance(value, ObjectId):
+            self._id = value
+        elif isinstance(value, str):
+            self._id = ObjectId(value)
+        else:
+            raise TypeError(f"Invalid type for id: {type(value)}")
+
     def get_dict(self, id_mongo=True, id_as_string=False, include_private_false=False) -> dict:
         """
         Return all variables from this object, similar to vars(object)
@@ -104,6 +115,11 @@ class ObjetoMongoAbstract(ABC):
 
     def __str__(self):
         return f'Class: {self.__class__.__name__} -> ObjectID {self._id}'
+
+    def __eq__(self, other):
+        if not isinstance(other, ObjetoMongoAbstract):
+            return False
+        return self._id == other._id
 
     @classmethod
     def generar_objects_from_list_dicts(cls, dictionaries: list | Cursor):

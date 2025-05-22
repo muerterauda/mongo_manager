@@ -42,6 +42,7 @@ class AggStProject(AggregationFunctionDict, AggregationStage):
         super().__init__()
         if mapping is None:
             mapping = {}
+        mapping = dict(mapping) if mapping is not None else {}
         if id_present is not None:
             mapping[self.ID] = 1 if id_present else 0
         self.data = {self.key_word(): mapping}
@@ -108,6 +109,8 @@ class AggStLimit(AggregationFunctionValue, AggregationStage):
         return '$limit'
 
     def __init__(self, number_limit: int):
+        if number_limit < 0:
+            raise ValueError("Limit must be non-negative")
         super().__init__(number_limit)
 
 
@@ -118,6 +121,8 @@ class AggStSkip(AggregationFunctionValue, AggregationStage):
         return '$skip'
 
     def __init__(self, number_skip: int):
+        if number_skip < 0:
+            raise ValueError("Skip must be non-negative")
         super().__init__(number_skip)
 
 

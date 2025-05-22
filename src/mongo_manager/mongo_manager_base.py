@@ -36,6 +36,11 @@ class MongoManager(metaclass=SingletonMeta):
     def collection(self, collection):
         return self.bd[collection]
 
-    @classmethod
-    def _destroy(cls):
-        del cls._instances[cls]
+    def _destroy(self):
+        import gc
+        self.__client.close()
+        key = getattr(self, '_singleton_key', None)
+        if key is not None:
+            SingletonMeta._instances.pop(key, None)
+        # Forzar recolección de basura (opcional)
+        gc.collect()

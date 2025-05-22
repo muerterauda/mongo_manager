@@ -90,9 +90,12 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
                   skip: int = 0, limit: int = 1000, sort=None) -> list[T_O]:
         if filter_dict is None:
             filter_dict = {}
-        object_list = self.collection.find(filter_dict).skip(skip).limit(limit if limit != -1 else 0)
+        object_list = self.collection.find(filter_dict)
         if sort is not None:
             object_list.sort(sort)
+        object_list.skip(skip)
+        if limit != -1:
+            object_list = object_list.limit(limit)
         return self.clase.generar_objects_from_list_dicts(object_list)
 
     def find_all(self, skip: int = 0, limit: int = 1000, sort=None) -> list[T_O]:
@@ -102,9 +105,10 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
         return self.clase.generar_object_from_dict(
             self.collection.find_one({'_id': ObjectId(id_mongo)}))
 
-    def delete_object(self, objeto: T_O) -> DeleteResult:
-        if objeto.id is not None:
-            return self.delete_by_id(objeto.id)
+    def delete_object(self, objeto: T_O) -> DeleteResult | None:
+        if objeto is None or objeto.id is None:
+            return None
+        return self.delete_by_id(objeto.id)
 
     def delete_by_id(self, id_mongo) -> DeleteResult:
         return self.collection.delete_one({'_id': ObjectId(id_mongo)})
@@ -157,7 +161,7 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
             return None
         if filter_dict is None:
             filter_dict = {}
-        self.collection.update_many(filter_dict, {"$set": objeto_dict})
+        return self.collection.update_many(filter_dict, {"$set": objeto_dict})
 
     def copy_collection_db(self, name_new_collection: str,
                            copy_match_condition: dict = None):
@@ -174,3 +178,12 @@ class RepositoryBase(Generic[T_O], metaclass=SingletonMeta):
                                         'Security fail, try to drop '
                                         'entire collection avoided.')
         self.collection.delete_many({})
+
+    def __repr__(self) -> str:
+        return (f"<{self.__class__.__name__}("
+                f"collection='{self.collection.name}', "
+                f"clase={self.clase.__name__})>")
+
+    def __str__(self) -> str:
+        return (f"Repositorio '{self.__class__.__name__}' para colección "
+                f"'{self.collection.name}', manejando objetos '{self.clase.__name__}'")
